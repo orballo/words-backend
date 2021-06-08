@@ -1,5 +1,6 @@
 import Router from '@koa/router'
 import db from './db'
+import sendEmail from './email'
 import { generateCode, generateToken, verifyToken } from './utils'
 
 const router = new Router()
@@ -71,7 +72,7 @@ router.post('/auth/signup', async (ctx) => {
     ctx.status = 200
     ctx.body = result
 
-    // sendEmail(generatedCode)
+    sendEmail(generatedCode)
 
     // Invalidate code after 5 minutes.
     setInterval(() => {
@@ -149,7 +150,7 @@ router.post('/auth/signin', async (ctx) => {
     ctx.status = 200
     ctx.body = result
 
-    // sendEmail(generatedCode)
+    sendEmail(generatedCode)
 
     // Invalidate code after 5 minutes.
     setInterval(() => {
@@ -256,7 +257,7 @@ router.delete('/auth/delete', async (ctx) => {
     ctx.status = 200
     ctx.body = result
 
-    // sendEmail(generatedCode)
+    sendEmail(generatedCode)
 
     // Invalidate code after 5 minutes.
     setInterval(() => {
