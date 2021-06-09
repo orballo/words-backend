@@ -4,8 +4,6 @@ const pool = new Pool()
 
 export default {
   init: () => {
-    console.log('Initializing database.')
-
     pool.query(
       `
       CREATE TABLE IF NOT EXISTS users (

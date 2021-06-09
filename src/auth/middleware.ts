@@ -1,11 +1,16 @@
 import { verifyToken } from './utils'
+import { ExtendableContext, Next } from 'koa'
 
 interface Options {
   roles?: string[]
 }
 
+interface AuthContext extends ExtendableContext {
+  user?: any
+}
+
 // Middleware to authenticate routes.
-export default (options: Options) => (ctx, next) => {
+export default (options?: Options) => (ctx: AuthContext, next: Next) => {
   const defaultOptions = {
     roles: ['admin', 'student'],
   }
