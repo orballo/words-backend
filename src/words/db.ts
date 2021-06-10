@@ -79,4 +79,16 @@ export default {
 
     return rows[0]
   },
+  deleteWord: async ({ id, author }) => {
+    const { rows } = await pool.query(
+      `
+      DELETE FROM words
+      WHERE id = $1 AND author = $2
+      RETURNING *
+      `,
+      [id, author],
+    )
+
+    return rows[0]
+  },
 }

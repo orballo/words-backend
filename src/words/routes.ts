@@ -22,8 +22,8 @@ words.post('/words', auth.middleware(), async (ctx) => {
       error: {
         code: 400,
         message: !spelling
-          ? 'Spelling field is mandatory.'
-          : 'Meaning field is mandatory.',
+          ? 'The field `spelling` is mandatory.'
+          : 'The field `meaning` is mandatory.',
       },
     }
 
@@ -155,7 +155,7 @@ words.patch('/words/review', auth.middleware(), async (ctx) => {
     ctx.body = {
       error: {
         code: 404,
-        message: 'Cannot find the word.',
+        message: 'Cannot find that word.',
       },
     }
 
@@ -164,6 +164,46 @@ words.patch('/words/review', auth.middleware(), async (ctx) => {
 
   ctx.status = 200
   ctx.body = result
+})
+
+/**
+ * Delete Word
+ */
+
+interface DeleteWordBody {
+  id?: number
+}
+
+words.delete('/words', auth.middleware(), async (ctx) => {
+  const { id } = ctx.request.body as DeleteWordBody
+
+  if (!id) {
+    ctx.status = 400
+    ctx.body = {
+      error: {
+        code: 400,
+        message: 'The field `id` is mandatory.',
+      },
+    }
+
+    return
+  }
+
+  const result = await db.deleteWord({ id, author: ctx.user.id })
+
+  if (!result) {
+    ctx.status = 404
+    ctx.body = {
+      error: {
+        code: 404,
+        message: 'Cannot find that word.',
+      },
+    }
+
+    return
+  }
+
+  ctx.status = 204
 })
 
 export default () => {
