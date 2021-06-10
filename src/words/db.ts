@@ -31,48 +31,50 @@ export default {
 
     return rows[0]
   },
-  getWord: async ({ id }) => {
+  getWord: async ({ id, author }) => {
     const { rows } = await pool.query(
       `
       SELECT * FROM words
-      WHERE id = $1
+      WHERE id = $1 AND author = $2
       `,
-      [id],
+      [id, author],
     )
 
     return rows[0]
   },
-  getAllWords: async () => {
+  getAllWords: async ({ author }) => {
     const { rows } = await pool.query(
       `
       SELECT * FROM words
+      WHERE author = $1
       `,
+      [author],
     )
 
     return rows
   },
-  editWord: async ({ id, spelling, meaning }) => {
+  editWord: async ({ id, author, spelling, meaning }) => {
     const { rows } = await pool.query(
       `
       UPDATE words
-      SET spelling = $2, meaning = $3, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $1
+      SET spelling = $3, meaning = $4, updated_at = CURRENT_TIMESTAMP
+      WHERE id = $1 AND author = $2
       RETURNING *
       `,
-      [id, spelling, meaning],
+      [id, author, spelling, meaning],
     )
 
     return rows[0]
   },
-  reviewWord: async ({ id, level }) => {
+  reviewWord: async ({ id, author, level }) => {
     const { rows } = await pool.query(
       `
       UPDATE words
-      SET level = $2, reviewed_at = CURRENT_TIMESTAMP
-      WHERE id = $1
+      SET level = $3, reviewed_at = CURRENT_TIMESTAMP
+      WHERE id = $1 AND author = $2
       RETURNING *
       `,
-      [id, level],
+      [id, author, level],
     )
 
     return rows[0]

@@ -41,16 +41,14 @@ words.post('/words', auth.middleware(), async (ctx) => {
  */
 
 words.get('/words/:id', auth.middleware(), async (ctx) => {
-  const { id } = ctx.params
+  const result = await db.getWord({ id: ctx.params.id, author: ctx.user.id })
 
-  const result = await db.getWord({ id })
-
-  if (result?.author !== ctx.user.id) {
-    ctx.status = 403
+  if (!result) {
+    ctx.status = 404
     ctx.body = {
       error: {
-        code: 403,
-        message: 'Insufficient permissions.',
+        code: 404,
+        message: 'Cannot find the word.',
       },
     }
 
@@ -66,19 +64,7 @@ words.get('/words/:id', auth.middleware(), async (ctx) => {
  */
 
 words.get('/words', auth.middleware(), async (ctx) => {
-  const result = await db.getAllWords()
-
-  if (result[0]?.author !== ctx.user.id) {
-    ctx.status = 403
-    ctx.body = {
-      error: {
-        code: 403,
-        message: 'Insufficient permissions.',
-      },
-    }
-
-    return
-  }
+  const result = await db.getAllWords({ author: ctx.user.id })
 
   ctx.status = 200
   ctx.body = result
@@ -113,21 +99,24 @@ words.patch('/words/edit', auth.middleware(), async (ctx) => {
     return
   }
 
-  const word = await db.getWord({ id })
+  const result = await db.editWord({
+    id,
+    author: ctx.user.id,
+    spelling,
+    meaning,
+  })
 
-  if (word?.author !== ctx.user.id) {
-    ctx.status = 403
+  if (!result) {
+    ctx.status = 404
     ctx.body = {
       error: {
-        code: 403,
-        message: 'Insufficient permissions.',
+        code: 404,
+        message: 'Cannot find the word.',
       },
     }
 
     return
   }
-
-  const result = await db.editWord({ id, spelling, meaning })
 
   ctx.status = 200
   ctx.body = result
@@ -159,21 +148,19 @@ words.patch('/words/review', auth.middleware(), async (ctx) => {
     return
   }
 
-  const word = await db.getWord({ id })
+  const result = await db.reviewWord({ id, author: ctx.user.id, level })
 
-  if (word?.author !== ctx.user.id) {
-    ctx.status = 403
+  if (!result) {
+    ctx.status = 404
     ctx.body = {
       error: {
-        code: 403,
-        message: 'Insufficient permissions.',
+        code: 404,
+        message: 'Cannot find the word.',
       },
     }
 
     return
   }
-
-  const result = await db.reviewWord({ id, level })
 
   ctx.status = 200
   ctx.body = result
