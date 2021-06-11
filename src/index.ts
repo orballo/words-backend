@@ -1,8 +1,10 @@
 import Koa from 'koa'
 import bodyparser from 'koa-bodyparser'
 import auth from './auth'
-import words from './words'
-import tags from './tags'
+import db from './db'
+import { words, tags } from './routes'
+
+db.init()
 
 const app = new Koa()
 

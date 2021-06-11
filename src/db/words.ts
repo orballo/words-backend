@@ -1,24 +1,6 @@
 import { Pool } from 'pg'
 
-const pool = new Pool()
-
-export default {
-  init: () => {
-    pool.query(
-      `
-      CREATE TABLE IF NOT EXISTS words (
-        id SERIAL PRIMARY KEY NOT NULL,
-        author INT NOT NULL REFERENCES users(id),
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        spelling TEXT NOT NULL,
-        meaning TEXT NOT NULL,
-        level INTEGER NOT NULL DEFAULT 0,
-        reviewed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-      )
-      `,
-    )
-  },
+export default (pool: Pool) => ({
   createWord: async ({ author, spelling, meaning }) => {
     const { rows } = await pool.query(
       `
@@ -91,4 +73,4 @@ export default {
 
     return rows[0]
   },
-}
+})

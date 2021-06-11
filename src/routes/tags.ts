@@ -1,6 +1,6 @@
 import Router from '@koa/router'
 import auth from '../auth'
-import db from './db'
+import db from '../db'
 
 const tags = new Router()
 
@@ -177,7 +177,4 @@ tags.delete('/tags', auth.middleware(), async (ctx) => {
   ctx.status = 204
 })
 
-export default () => {
-  db.init()
-  return tags.routes()
-}
+export default tags

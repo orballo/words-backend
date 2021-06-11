@@ -1,21 +1,6 @@
 import { Pool } from 'pg'
 
-const pool = new Pool()
-
-export default {
-  init: () => {
-    pool.query(
-      `
-      CREATE TABLE IF NOT EXISTS tags (
-        id SERIAL PRIMARY KEY NOT NULL,
-        author INT NOT NULL REFERENCES users(id),
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        name TEXT NOT NULL UNIQUE
-      )
-      `,
-    )
-  },
+export default (pool: Pool) => ({
   createTag: async ({ author, name }) => {
     const { rows } = await pool.query(
       `
@@ -75,4 +60,4 @@ export default {
 
     return rows[0]
   },
-}
+})

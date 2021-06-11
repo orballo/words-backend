@@ -1,6 +1,6 @@
 import Router from '@koa/router'
-import db from './db'
 import auth from '../auth'
+import db from '../db'
 
 const words = new Router()
 
@@ -206,7 +206,4 @@ words.delete('/words', auth.middleware(), async (ctx) => {
   ctx.status = 204
 })
 
-export default () => {
-  db.init()
-  return words.routes()
-}
+export default words
