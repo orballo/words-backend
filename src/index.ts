@@ -9,7 +9,7 @@ db.init()
 
 const app = new Koa()
 
-app.use(cors())
+app.use(cors({ credentials: true }))
 app.use(bodyparser())
 app.use(auth.routes())
 app.use(words.routes())

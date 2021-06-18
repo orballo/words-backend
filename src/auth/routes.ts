@@ -5,6 +5,8 @@ import { generateCode, generateToken, verifyToken } from './utils'
 
 const router = new Router()
 
+const PROD = process.env.NODE_ENV === 'production'
+
 interface SignupBody {
   email?: string
   username?: string
@@ -105,7 +107,11 @@ router.post('/auth/signup', async (ctx) => {
   // Return the new created user and the authentication token.
   ctx.status = 201
   ctx.body = result
-  ctx.cookies.set('words_auth', generatedToken)
+  ctx.cookies.set('words_auth', generatedToken, {
+    sameSite: PROD ? 'none' : 'lax',
+    secure: PROD,
+    domain: PROD ? 'words.orballo.dev' : 'words.local',
+  })
 
   // Delete the stored code once it was used.
   db.deleteCode({ email })
@@ -179,7 +185,11 @@ router.post('/auth/signin', async (ctx) => {
 
   // Return the new created user and the authentication token.
   ctx.body = user
-  ctx.cookies.set('words_auth', generatedToken)
+  ctx.cookies.set('words_auth', generatedToken, {
+    sameSite: PROD ? 'none' : 'lax',
+    secure: PROD,
+    domain: PROD ? 'words.orballo.dev' : 'words.local',
+  })
 
   // Delete the stored code once it was used.
   db.deleteCode({ email })
@@ -203,7 +213,11 @@ router.get('/auth/signout', async (ctx) => {
 
   try {
     verifyToken(token)
-    ctx.cookies.set('words_auth')
+    ctx.cookies.set('words_auth', null, {
+      sameSite: PROD ? 'none' : 'lax',
+      secure: PROD,
+      domain: PROD ? 'words.orballo.dev' : 'words.local',
+    })
     ctx.status = 204
   } catch (error) {
     ctx.status = 401
@@ -282,7 +296,11 @@ router.delete('/auth/delete', async (ctx) => {
   }
 
   await db.deleteUser({ id: user.id })
-  ctx.cookies.set('words_auth')
+  ctx.cookies.set('words_auth', null, {
+    sameSite: PROD ? 'none' : 'lax',
+    secure: PROD,
+    domain: PROD ? 'words.orballo.dev' : 'words.local',
+  })
   ctx.status = 204
 
   db.deleteCode({ email: user.email })
