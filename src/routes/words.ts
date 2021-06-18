@@ -11,10 +11,11 @@ const words = new Router()
 interface CreateWordBody {
   spelling?: string
   meaning?: string
+  tags?: number[]
 }
 
 words.post('/words', auth.middleware(), async (ctx) => {
-  const { spelling, meaning } = ctx.request.body as CreateWordBody
+  const { spelling, meaning, tags = [] } = ctx.request.body as CreateWordBody
 
   if (!spelling || !meaning) {
     ctx.status = 400
@@ -30,7 +31,13 @@ words.post('/words', auth.middleware(), async (ctx) => {
     return
   }
 
-  const result = await db.createWord({ author: ctx.user.id, meaning, spelling })
+  const result = await db.createWord({
+    author: ctx.user.id,
+    meaning,
+    spelling,
+  })
+
+  await db.createWtRelationships({ wordId: result.id, tags })
 
   ctx.status = 201
   ctx.body = result

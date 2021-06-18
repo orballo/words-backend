@@ -1,4 +1,5 @@
 import Koa from 'koa'
+import cors from '@koa/cors'
 import bodyparser from 'koa-bodyparser'
 import auth from './auth'
 import db from './db'
@@ -8,6 +9,7 @@ db.init()
 
 const app = new Koa()
 
+app.use(cors())
 app.use(bodyparser())
 app.use(auth.routes())
 app.use(words.routes())

@@ -1,6 +1,7 @@
 import { Pool } from 'pg'
 import words from './words'
 import tags from './tags'
+import wtRelationships from './wt-relationships'
 
 const pool = new Pool()
 
@@ -48,4 +49,5 @@ export default {
   },
   ...words(pool),
   ...tags(pool),
+  ...wtRelationships(pool),
 }

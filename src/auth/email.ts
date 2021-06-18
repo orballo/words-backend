@@ -9,10 +9,10 @@ const email = mailgun.client({
   url: process.env.MAILGUN_URL,
 })
 
-export default async (code: string) => {
+export default async (code: string, recipient: string) => {
   await email.messages.create('orballo.dev', {
-    from: 'Aloud by Orballo <aloud@orballo.dev>',
-    to: 'asrielo@gmail.com',
+    from: 'Words by Orballo <words@orballo.dev>',
+    to: recipient,
     subject: 'Verification code for Words by Orballo',
     text: `Here is your verification code for Words by Orballo: ${code}`,
   })
