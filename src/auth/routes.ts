@@ -2,6 +2,7 @@ import Router from '@koa/router'
 import db from './db'
 import sendEmail from './email'
 import { generateCode, generateToken, verifyToken } from './utils'
+import middleware from './middleware'
 
 const router = new Router()
 
@@ -304,6 +305,12 @@ router.delete('/auth/delete', async (ctx) => {
   ctx.status = 204
 
   db.deleteCode({ email: user.email })
+})
+
+router.get('/auth/verify', middleware(), (ctx) => {
+  console.log('ctx:', ctx.user)
+  ctx.status = 200
+  ctx.body = ctx.user
 })
 
 export default () => {
