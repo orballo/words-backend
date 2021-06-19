@@ -308,7 +308,6 @@ router.delete('/auth/delete', async (ctx) => {
 })
 
 router.get('/auth/verify', middleware(), (ctx) => {
-  console.log('ctx:', ctx.user)
   ctx.status = 200
   ctx.body = ctx.user
 })
