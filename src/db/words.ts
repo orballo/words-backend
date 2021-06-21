@@ -29,6 +29,7 @@ export default (pool: Pool) => ({
       `
       SELECT * FROM words
       WHERE author = $1
+      ORDER BY created_at DESC
       `,
       [author],
     )

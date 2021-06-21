@@ -29,6 +29,7 @@ export default (pool: Pool) => ({
       `
       SELECT * FROM tags
       WHERE author = $1
+      ORDER BY created_at DESC
       `,
       [author],
     )
