@@ -14,4 +14,15 @@ export default (pool: Pool) => ({
       ),
     )
   },
+  getTagsWithWord: async ({ wordId }) => {
+    const { rows } = await pool.query(
+      `
+      SELECT tag_id FROM wt_relationships
+      WHERE word_id = $1
+      `,
+      [wordId],
+    )
+
+    return rows.map(({ tag_id }) => tag_id)
+  },
 })

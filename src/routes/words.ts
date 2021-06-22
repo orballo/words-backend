@@ -62,6 +62,9 @@ words.get('/words/:id', auth.middleware(), async (ctx) => {
     return
   }
 
+  const tags = await db.getTagsWithWord({ wordId: ctx.params.id })
+  result.tags = tags
+
   ctx.status = 200
   ctx.body = result
 })
@@ -73,8 +76,16 @@ words.get('/words/:id', auth.middleware(), async (ctx) => {
 words.get('/words', auth.middleware(), async (ctx) => {
   const result = await db.getAllWords({ author: ctx.user.id })
 
+  const resultWithTags = await Promise.all(
+    result.map(async (word) => {
+      const tags = await db.getTagsWithWord({ wordId: word.id })
+      word.tags = tags
+      return word
+    }),
+  )
+
   ctx.status = 200
-  ctx.body = result
+  ctx.body = resultWithTags
 })
 
 /**
