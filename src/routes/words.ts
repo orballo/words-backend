@@ -37,7 +37,8 @@ words.post('/words', auth.middleware(), async (ctx) => {
     spelling,
   })
 
-  await db.createWtRelationships({ wordId: result.id, tags })
+  const storedTags = await db.createWtRelationships({ wordId: result.id, tags })
+  result.tags = storedTags
 
   ctx.status = 201
   ctx.body = result
@@ -96,10 +97,11 @@ interface EditWordBody {
   id?: string
   spelling?: string
   meaning?: string
+  tags?: number[]
 }
 
 words.patch('/words/edit', auth.middleware(), async (ctx) => {
-  const { id, spelling, meaning } = ctx.request.body as EditWordBody
+  const { id, spelling, meaning, tags } = ctx.request.body as EditWordBody
 
   if (!id || !spelling || !meaning) {
     ctx.status = 400
@@ -117,6 +119,13 @@ words.patch('/words/edit', auth.middleware(), async (ctx) => {
     return
   }
 
+  // Remove all relationships.
+  await db.removeAllWtRelationshipsByWord({ wordId: id })
+  // Create all relationships.
+  await db.createWtRelationships({ wordId: id, tags })
+  // Get the tags stored in db.
+  const storedTags = await db.getTagsWithWord({ wordId: id })
+  // Update the word.
   const result = await db.editWord({
     id,
     author: ctx.user.id,
@@ -136,6 +145,7 @@ words.patch('/words/edit', auth.middleware(), async (ctx) => {
     return
   }
 
+  result.tags = storedTags
   ctx.status = 200
   ctx.body = result
 })
@@ -207,6 +217,7 @@ words.delete('/words', auth.middleware(), async (ctx) => {
     return
   }
 
+  await db.removeAllWtRelationshipsByWord({ wordId: id })
   const result = await db.deleteWord({ id, author: ctx.user.id })
 
   if (!result) {
