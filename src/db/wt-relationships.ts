@@ -44,6 +44,18 @@ export default (pool: Pool) => ({
 
     return rows[0]
   },
+  removeAllWtRelationshipsByTag: async ({ tagId }) => {
+    const { rows } = await pool.query(
+      `
+      DELETE FROM wt_relationships
+      WHERE tag_id = $1
+      RETURNING *
+      `,
+      [tagId],
+    )
+
+    return rows[0]
+  },
   removeWtRelationship: async ({ wordId, tagId }) => {
     const { rows } = await pool.query(
       `

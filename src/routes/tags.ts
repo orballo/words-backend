@@ -160,6 +160,7 @@ tags.delete('/tags', auth.middleware(), async (ctx) => {
     return
   }
 
+  await db.removeAllWtRelationshipsByTag({ tagId: id })
   const result = await db.deleteTag({ id, author: ctx.user.id })
 
   if (!result) {
