@@ -176,6 +176,9 @@ words.patch('/words/review', auth.middleware(), async (ctx) => {
     return
   }
 
+  // Get the tags stored in db.
+  const storedTags = await db.getTagsWithWord({ wordId: id })
+  // Update word level.
   const result = await db.reviewWord({ id, author: ctx.user.id, level })
 
   if (!result) {
@@ -190,6 +193,7 @@ words.patch('/words/review', auth.middleware(), async (ctx) => {
     return
   }
 
+  result.tags = storedTags
   ctx.status = 200
   ctx.body = result
 })
