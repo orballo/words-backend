@@ -3,7 +3,11 @@ import words from './words'
 import tags from './tags'
 import wtRelationships from './wt-relationships'
 
-const pool = new Pool()
+const pool = new Pool(
+  process.env.NODE_ENV === 'production' && {
+    connectionString: process.env.DATABASE_URL,
+  },
+)
 
 export default {
   init: () => {
