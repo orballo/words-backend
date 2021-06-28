@@ -1,10 +1,13 @@
 import { Pool } from 'pg'
 
-const pool = new Pool()
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+})
 
 export default {
-  init: () => {
-    pool.query(
+  init: async () => {
+    await pool.query(
       `
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY NOT NULL,
@@ -17,14 +20,14 @@ export default {
       `,
     )
 
-    pool.query(
+    await pool.query(
       `
       CREATE TABLE IF NOT EXISTS auth_codes (
         email TEXT PRIMARY KEY NOT NULL,
         code TEXT NOT NULL,
         timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-      )
-      `,
+        )
+        `,
     )
   },
   saveCode: async ({ email, code }) => {

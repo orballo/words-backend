@@ -5,7 +5,10 @@ import * as auth from './auth'
 import db from './db'
 import { words, tags } from './routes'
 
-db.init()
+;(async () => {
+  await auth.db.init()
+  await db.init()
+})()
 
 const app = new Koa()
 

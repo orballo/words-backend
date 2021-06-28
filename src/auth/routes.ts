@@ -312,7 +312,4 @@ router.get('/auth/verify', middleware(), (ctx) => {
   ctx.body = ctx.user
 })
 
-export default () => {
-  db.init()
-  return router.routes()
-}
+export default () => router.routes()

@@ -3,17 +3,15 @@ import words from './words'
 import tags from './tags'
 import wtRelationships from './wt-relationships'
 
-const pool = new Pool(
-  process.env.NODE_ENV === 'production' && {
-    connectionString: process.env.DATABASE_URL,
-    ssl: true,
-  },
-)
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+})
 
 export default {
-  init: () => {
+  init: async () => {
     // Initialize words.
-    pool.query(
+    await pool.query(
       `
       CREATE TABLE IF NOT EXISTS words (
         id SERIAL PRIMARY KEY NOT NULL,
@@ -29,7 +27,7 @@ export default {
     )
 
     // Initialize tags.
-    pool.query(
+    await pool.query(
       `
       CREATE TABLE IF NOT EXISTS tags (
         id SERIAL PRIMARY KEY NOT NULL,
@@ -42,7 +40,7 @@ export default {
     )
 
     // Initialize words-tags relationships.
-    pool.query(
+    await pool.query(
       `
       CREATE TABLE IF NOT EXISTS wt_relationships (
         word_id SERIAL REFERENCES words(id),
