@@ -6,6 +6,7 @@ import wtRelationships from './wt-relationships'
 const pool = new Pool(
   process.env.NODE_ENV === 'production' && {
     connectionString: process.env.DATABASE_URL,
+    ssl: true,
   },
 )
 
