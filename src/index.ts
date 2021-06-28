@@ -13,6 +13,10 @@ const app = new Koa()
 
 app.use(cors({ credentials: true }))
 app.use(bodyparser())
+app.use((ctx, next) => {
+  ctx.cookies.secure = true
+  return next()
+})
 app.use(auth.routes())
 app.use(words.routes())
 app.use(tags.routes())
