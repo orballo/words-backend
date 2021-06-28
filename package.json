@@ -16,8 +16,7 @@
     "@types/koa__cors": "^3.0.2",
     "@types/koa__router": "^8.0.4",
     "@types/pg": "^8.6.0",
-    "nodemon": "^2.0.7",
-    "typescript": "^4.3.2"
+    "nodemon": "^2.0.7"
   },
   "dependencies": {
     "@koa/cors": "^3.1.0",
@@ -30,6 +29,7 @@
     "koa-bodyparser": "^4.3.0",
     "mailgun.js": "^3.4.0",
     "pg": "^8.6.0",
-    "ts-node": "^10.0.0"
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
   }
 }
