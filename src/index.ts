@@ -4,7 +4,6 @@ import bodyparser from 'koa-bodyparser'
 import * as auth from './auth'
 import db from './db'
 import { words, tags } from './routes'
-
 ;(async () => {
   await auth.db.init()
   await db.init()
@@ -18,4 +17,4 @@ app.use(auth.routes())
 app.use(words.routes())
 app.use(tags.routes())
 
-app.listen(4000)
+app.listen(process.env.PORT || 4000)
