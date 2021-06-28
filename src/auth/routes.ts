@@ -217,7 +217,7 @@ router.get('/auth/signout', async (ctx) => {
     ctx.cookies.set('words_auth', null, {
       sameSite: PROD ? 'none' : 'lax',
       secure: PROD,
-      domain: PROD ? 'words.orballo.dev' : 'words.local',
+      domain: PROD ? 'wordsbackend.orballo.dev' : 'words.local',
     })
     ctx.status = 204
   } catch (error) {
