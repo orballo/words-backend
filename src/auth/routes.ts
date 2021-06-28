@@ -111,7 +111,7 @@ router.post('/auth/signup', async (ctx) => {
   ctx.cookies.set('words_auth', generatedToken, {
     sameSite: PROD ? 'none' : 'lax',
     secure: PROD,
-    domain: PROD ? 'words.orballo.dev' : 'words.local',
+    domain: PROD ? 'wordsbackend.orballo.dev' : 'words.local',
   })
 
   // Delete the stored code once it was used.
@@ -189,7 +189,7 @@ router.post('/auth/signin', async (ctx) => {
   ctx.cookies.set('words_auth', generatedToken, {
     sameSite: PROD ? 'none' : 'lax',
     secure: PROD,
-    domain: PROD ? 'words.orballo.dev' : 'words.local',
+    domain: PROD ? 'wordsbackend.orballo.dev' : 'words.local',
   })
 
   // Delete the stored code once it was used.
@@ -300,7 +300,7 @@ router.delete('/auth/delete', async (ctx) => {
   ctx.cookies.set('words_auth', null, {
     sameSite: PROD ? 'none' : 'lax',
     secure: PROD,
-    domain: PROD ? 'words.orballo.dev' : 'words.local',
+    domain: PROD ? 'wordsbackend.orballo.dev' : 'words.local',
   })
   ctx.status = 204
 
