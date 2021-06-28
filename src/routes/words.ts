@@ -1,5 +1,5 @@
 import Router from '@koa/router'
-import auth from '../auth'
+import * as auth from '../auth'
 import db from '../db'
 
 const words = new Router()

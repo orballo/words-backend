@@ -1,7 +1,7 @@
 import Koa from 'koa'
 import cors from '@koa/cors'
 import bodyparser from 'koa-bodyparser'
-import auth from './auth'
+import * as auth from './auth'
 import db from './db'
 import { words, tags } from './routes'
 

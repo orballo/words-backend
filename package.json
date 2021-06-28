@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node --require dotenv/config src/index.ts",
+    "build": "tsc",
+    "start": "node --require dotenv/config build/index.js",
     "dev": "nodemon --require dotenv/config src/index.ts"
   },
   "repository": {
@@ -16,6 +17,8 @@
     "@types/koa__cors": "^3.0.2",
     "@types/koa__router": "^8.0.4",
     "@types/pg": "^8.6.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2",
     "nodemon": "^2.0.7"
   },
   "dependencies": {
@@ -28,8 +31,6 @@
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "mailgun.js": "^3.4.0",
-    "pg": "^8.6.0",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.3.2"
+    "pg": "^8.6.0"
   }
 }
