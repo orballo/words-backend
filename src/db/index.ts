@@ -3,10 +3,13 @@ import words from './words'
 import tags from './tags'
 import wtRelationships from './wt-relationships'
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-})
+const pool =
+  process.env.NODE_ENV === 'production'
+    ? new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+      })
+    : new Pool()
 
 export default {
   init: async () => {
