@@ -1,6 +1,14 @@
 import { generate } from 'generate-password'
 import jwt from 'jsonwebtoken'
 
+const PROD = process.env.NODE_ENV === 'production'
+
+export const generateCookieSettings = () => ({
+  sameSite: 'none',
+  secure: true,
+  domain: PROD ? 'wordsbackend.orballo.dev' : 'words.local',
+})
+
 export const generateCode = () =>
   generate({
     length: 10,
